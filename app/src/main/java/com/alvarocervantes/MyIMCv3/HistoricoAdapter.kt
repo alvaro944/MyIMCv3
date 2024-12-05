@@ -15,6 +15,7 @@ class HistoricoAdapter(private val historico: List<String>) :
         val tvAnio: TextView = view.findViewById(R.id.tvAnio)
         val tvEstado: TextView = view.findViewById(R.id.tvEstado)
         val tvGenero: TextView = view.findViewById(R.id.tvGenero)
+        val tvPesoAltura: TextView = view.findViewById(R.id.tvPesoAltura) // Nuevo
         val tvIMC: TextView = view.findViewById(R.id.tvIMC)
     }
 
@@ -27,19 +28,27 @@ class HistoricoAdapter(private val historico: List<String>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val registro = historico[position].split(";")
 
-        // Formatear la fecha
-        val fechaParts = registro[0].split("/")
+        // Desglosar fecha
+        val fechaParts = registro.getOrNull(0)?.split("/") ?: listOf("N/A", "N/A", "N/A")
         val dia = fechaParts.getOrNull(0) ?: "N/A"
         val mes = obtenerMes(fechaParts.getOrNull(1)?.toIntOrNull())
         val anio = fechaParts.getOrNull(2) ?: "N/A"
+
+        // Desglosar datos
+        val genero = registro.getOrNull(1) ?: "N/A"
+        val imc = registro.getOrNull(2) ?: "N/A"
+        val estado = registro.getOrNull(3) ?: "N/A"
+        val peso = registro.getOrNull(4) ?: "N/A"
+        val altura = registro.getOrNull(5) ?: "N/A"
 
         // Asignar valores a las vistas
         holder.tvMes.text = mes
         holder.tvDia.text = dia
         holder.tvAnio.text = anio
-        holder.tvEstado.text = registro.getOrNull(3) ?: "N/A"
-        holder.tvGenero.text = registro.getOrNull(1) ?: "N/A"
-        holder.tvIMC.text = registro.getOrNull(2) ?: "N/A"
+        holder.tvEstado.text = estado
+        holder.tvGenero.text = genero
+        holder.tvPesoAltura.text = "Peso: $peso Altura: $altura" // Nuevo
+        holder.tvIMC.text = imc
     }
 
     override fun getItemCount() = historico.size
